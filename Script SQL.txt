@@ -1,0 +1,88 @@
+-- Table PLAYER
+CREATE TABLE PLAYER (
+    idPlayer INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    birth DATE NOT NULL
+);
+
+-- Table GAME
+CREATE TABLE GAME (
+    idGame INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    genre VARCHAR(100) NOT NULL,
+    ageRating INT NOT NULL
+);
+
+-- Table ROOMS
+CREATE TABLE ROOMS (
+    idRooms INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    maxPlayer INT NOT NULL
+);
+
+-- Table GAMESESSION
+CREATE TABLE GAMESESSION (
+    idGameSession INT AUTO_INCREMENT PRIMARY KEY,
+    idRooms INT NOT NULL,
+    idGame INT NOT NULL,
+    startTime DATETIME NOT NULL,
+    endTime DATETIME NOT NULL,
+    FOREIGN KEY (idRooms) REFERENCES ROOMS(idRooms) ON DELETE CASCADE,
+    FOREIGN KEY (idGame) REFERENCES GAME(idGame) ON DELETE CASCADE
+);
+
+-- Table PLAYERSCORE
+CREATE TABLE PLAYERSCORE (
+    idPlayerScore INT AUTO_INCREMENT PRIMARY KEY,
+    idPlayer INT NOT NULL,
+    idGameSession INT NOT NULL,
+    score INT NOT NULL,
+    rank INT NOT NULL,
+    FOREIGN KEY (idPlayer) REFERENCES PLAYER(idPlayer) ON DELETE CASCADE,
+    FOREIGN KEY (idGameSession) REFERENCES GAMESESSION(idGameSession) ON DELETE CASCADE
+);
+
+--Insert
+-- Insérer des joueurs
+INSERT INTO PLAYER (name, email, birth) VALUES 
+('Alice Smith', 'alice.smith@example.com', '1995-06-15'),
+('Bob Johnson', 'bob.johnson@example.com', '1992-11-03'),
+('Charlie Brown', 'charlie.brown@example.com', '2000-04-22');
+
+-- Insérer des jeux
+INSERT INTO GAME (title, genre, ageRating) VALUES 
+('Space Invaders', 'Arcade', 10),
+('Fantasy Quest', 'RPG', 12),
+('Speed Racer', 'Racing', 8);
+
+-- Insérer des salles
+INSERT INTO ROOMS (name, maxPlayer) VALUES 
+('Room A', 4),
+('Room B', 6);
+
+-- Insérer des sessions de jeu
+INSERT INTO GAMESESSION (idRooms, idGame, startTime, endTime) VALUES 
+(1, 1, '2024-11-15 14:00:00', '2024-11-15 15:00:00'),
+(1, 2, '2024-11-15 15:30:00', '2024-11-15 16:30:00'),
+(2, 3, '2024-11-16 10:00:00', '2024-11-16 11:00:00'),
+(2, 1, '2024-11-16 11:30:00', '2024-11-16 12:30:00'),
+(1, 3, '2024-11-17 14:00:00', '2024-11-17 15:00:00');
+
+-- Insérer des scores pour les joueurs
+INSERT INTO PLAYERSCORE (idPlayer, idGameSession, score, rank) VALUES 
+(1, 1, 1200, 1),
+(2, 1, 1000, 2),
+(3, 1, 800, 3),
+(1, 2, 300, 3),
+(2, 2, 500, 2),
+(3, 2, 700, 1),
+(1, 3, 1500, 1),
+(2, 3, 1000, 2),
+(3, 3, 500, 3),
+(1, 4, 900, 2),
+(2, 4, 1100, 1),
+(3, 4, 700, 3),
+(1, 5, 1300, 1),
+(2, 5, 1100, 2),
+(3, 5, 900, 3);
